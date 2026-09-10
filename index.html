@@ -138,7 +138,7 @@ button{-webkit-appearance:none;font-family:inherit;cursor:pointer;border:none}
       <button class="login-btn" onclick="selUser('Giovanni')"><div class="lb-icon" style="background:rgba(245,158,11,0.15)">🚚</div><div><div class="lb-name">Giovanni</div><div class="lb-zones">Zona 1 — Nocera-Salerno</div></div></button>
       <button class="login-btn" onclick="selUser('Antonio')"><div class="lb-icon" style="background:rgba(59,130,246,0.15)">🚚</div><div><div class="lb-name">Antonio</div><div class="lb-zones">Zona 3 — Avellino-Benevento</div></div></button>
       <button class="login-btn" onclick="selUser('Sergio')"><div class="lb-icon" style="background:rgba(16,185,97,0.15)">🚚</div><div><div class="lb-name">Sergio</div><div class="lb-zones">Zone 2, 3 — Montoro-Solofra, Avellino-Benevento</div></div></button>
-      <button class="login-btn" onclick="selUser('Carmela')"><div class="lb-icon" style="background:rgba(236,72,153,0.15)">👩</div><div><div class="lb-name">Carmela</div><div class="lb-zones">Controllo · Solo visualizzazione</div></div></button>
+      <button class="login-btn" onclick="selUser('Carmela')"><div class="lb-icon" style="background:rgba(236,72,153,0.15)">👩</div><div><div class="lb-name">Carmela</div><div class="lb-zones">Tutte le zone</div></div></button>
     </div>
     <div id="pinPanel" class="hid" style="width:100%;max-width:320px;margin-top:24px">
       <div style="background:var(--card);border-radius:16px;border:1px solid var(--border);padding:24px 20px;text-align:center">
@@ -277,7 +277,7 @@ function initApp(){
   document.getElementById("sUrl").value=gUrl();
   try{var s=localStorage.getItem("dayData");if(s)dayData=JSON.parse(s)}catch(e){}
   delete dayData["2026-03-24"];delete dayData["2026-03-25"];saveL();
-  var mz=curUser==="Carmela"?"Controllo · Tutte le zone":myZones().map(function(id){var z=zoneById(id);return z?z.name+" — "+z.area:id}).join(", ");
+  var mz=myZones().map(function(id){var z=zoneById(id);return z?z.name+" — "+z.area:id}).join(", ");
   document.getElementById("ubName").textContent=curUser;document.getElementById("ubZones").textContent=mz;
   findAct();if(gUrl()){doSync().then(function(){if(!_isConnected)showT("⛔ Connessione al server assente")})}else updUI();if(curUser!=="Carmela"){chkPM();setInterval(chkPM,60000)}setInterval(function(){if(gUrl())doSync()},60000)}
 function findAct(){var d=new Date();d.setDate(d.getDate()-1);var y=d.toISOString().slice(0,10);activeDate=(dayData[y]&&!myDayOk(y))?y:todayStr}
@@ -308,7 +308,7 @@ function updUI(){
     if(hasD&&v.autista)html+='<div class="zr-detail">'+(v.autista==="Carmela"?"👩 ":"🚚 ")+v.autista+'</div>';
   });
   document.getElementById("zoneGrid").innerHTML=html;
-  var pend=myPendZ(activeDate);document.getElementById("btnAdd").classList.toggle("hid",pend.length===0||curUser==="Carmela"||!_isConnected);
+  var pend=myPendZ(activeDate);document.getElementById("btnAdd").classList.toggle("hid",pend.length===0||!_isConnected);
   var offBanner=document.getElementById("offlineBanner");
   if(offBanner)offBanner.classList.toggle("hid",_isConnected);
   if(myDayOk(activeDate)&&isOld){activeDate=todayStr;showT("✓ Completato!");updUI();return}chkPM()}
